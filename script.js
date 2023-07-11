@@ -1,6 +1,7 @@
 var startButton = document.getElementById('start');
 var timeLeftElement = document.getElementById('time-left');
 var mainElement = document.querySelector('main');
+var scoreElement = document.getElementById('score');
 
 var timeLeft = 60;
 var questionIndex = 0;
@@ -35,7 +36,7 @@ function setTime() {
         timeLeft--;
         timeLeftElement.textContent = timeLeft;
 
-        if (timeLeft <= 0) {
+        if (timeLeft <= 0 || questionIndex >= questions.length) {
             clearInterval(timerInterval);
             endQuiz();
         }
@@ -53,41 +54,44 @@ function showQuestion() {
     choicesEl.innerHTML = ""
     for (let i = 0; i < questions[questionIndex].choices.length; i++) {
         const element = questions[questionIndex].choices[i];
-       var button = document.createElement("button")
-       button.textContent = element
-       button.onclick =  checkanswers
+        var button = document.createElement("button")
+        button.textContent = element
+        button.onclick = checkanswers
 
-    choicesEl.append(button);
+        choicesEl.append(button);
 
     }
 
 }
-function checkanswers(event){
-    if (event.target.textContent == questions[questionIndex].answer){
+function checkanswers(event) {
+    if (event.target.textContent == questions[questionIndex].answer) {
         console.log("correct")
     }
     else {
         console.log("wrong")
         timeLeft -= 10
     }
-    questionIndex ++ 
+    questionIndex++
     showQuestion()
 }
 
 function endQuiz() {
     console.log('end of game')
+    scoreElement.textContent = 'Score: ' + timeLeft;
+    scoreElement.style.display = 'block';
+    startButton.style.display = 'none';
     document.querySelector(".question-bank").style.display = "none"
     document.querySelector(".user-input").style.display =
-    "block"
-    
+        "block"
+
 }
-    document.querySelector(".initial")
-    .addEventListener("click", function(){
-        var input = document.querySelector(".initials-button").value 
+document.querySelector(".initial")
+    .addEventListener("click", function () {
+        var input = document.querySelector(".initials-button").value
         console.log(input)
-        var highscoresarray = JSON.parse(localStorage.getItem("high-scores"))|| []
-    highscoresarray.push(input)
-    localStorage.setItem("high-scores", JSON.stringify(highscoresarray))
+        var highscoresarray = JSON.parse(localStorage.getItem("high-scores")) || []
+        highscoresarray.push(input)
+        localStorage.setItem("high-scores", JSON.stringify(highscoresarray))
     })
 
 
